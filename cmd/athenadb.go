@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/AlejandroAM91/athenadb/internal/server"
+)
 
 func main() {
-	fmt.Println("Hello AthenaDB!!!")
+	server.Start(":80")
 }
