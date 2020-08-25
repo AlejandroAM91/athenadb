@@ -1,9 +1,10 @@
 package server
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/AlejandroAM91/athenadb/internal/server/test"
+	"github.com/AlejandroAM91/athenadb/internal/server/database"
 	"github.com/gorilla/mux"
 )
 
@@ -11,8 +12,12 @@ import (
 func Start(endpoint string) {
 	// Initialize routes
 	router := mux.NewRouter()
-	test.Init(router)
+	database.Init(router)
 
 	// Start server
-	http.ListenAndServe(endpoint, router)
+	server := &http.Server{
+		Addr:    endpoint,
+		Handler: router,
+	}
+	log.Fatal(server.ListenAndServe())
 }

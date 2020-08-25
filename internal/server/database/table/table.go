@@ -1,7 +1,7 @@
 package table
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,5 +10,5 @@ import (
 // Handler manages test calls
 func Handler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	fmt.Printf("Path /%s/%s called\n", vars["database"], vars["table"])
+	log.Printf("Called /%s/%s\n", vars["database"], vars["table"])
 }
