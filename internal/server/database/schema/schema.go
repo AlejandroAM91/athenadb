@@ -1,4 +1,4 @@
-package table
+package schema
 
 import (
 	"log"
@@ -7,8 +7,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Handler manages table calls
+// Handler manages schema calls
 func Handler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	log.Printf("Called /%s/%s (table data)\n", vars["database"], vars["table"])
+	log.Printf("Called /%s/schema (database schema)\n", vars["database"])
 }
