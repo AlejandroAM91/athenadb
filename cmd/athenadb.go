@@ -1,9 +1,8 @@
 package main
 
-import (
-	"github.com/AlejandroAM91/athenadb/internal/server"
-)
+import "github.com/AlejandroAM91/athenadb/internal/app/athenadb"
 
 func main() {
-	server.Start(":80")
+	app := athenadb.CreateApp(":80")
+	app.StartServer()
 }
