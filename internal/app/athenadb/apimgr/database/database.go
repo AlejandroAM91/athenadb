@@ -11,7 +11,7 @@ import (
 func Init(router *mux.Router, datamgr *datamgr.DataManager) {
 
 	// Initialize handlers
-	router.Handle("/{database}/schema", schema.CreateSchema(datamgr))
-	router.HandleFunc("/{database}/{table}", table.Handler)
-	router.HandleFunc("/{database}/{table}/schema", table.SchemaHandler)
+	router.Handle("/{database}/schema", schema.CreateHandler(datamgr))
+	router.Handle("/{database}/{table}", table.CreateHandler(datamgr))
+	router.Handle("/{database}/{table}/schema", table.CreateSchemaHandler(datamgr))
 }

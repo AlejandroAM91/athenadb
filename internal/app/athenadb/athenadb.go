@@ -1,8 +1,6 @@
 package athenadb
 
 import (
-	"fmt"
-
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/apimgr"
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/datamgr"
 )
@@ -16,7 +14,6 @@ type App struct {
 func CreateApp(endpoint string) App {
 	// Create application data manager
 	datamgr := datamgr.CreateDataManager()
-	fmt.Println(datamgr.DatabaseList)
 
 	// Create application data manager
 	apimgr := apimgr.CreateAPIManager(endpoint, datamgr)

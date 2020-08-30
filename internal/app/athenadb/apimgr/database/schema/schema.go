@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/datamgr"
@@ -10,30 +8,36 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// The Schema contains a database schema information
-type Schema struct {
+// The Handler contains a database schema call handler
+type Handler struct {
 	datamgr *datamgr.DataManager
 }
 
-// CreateSchema creates database schema handler
-func CreateSchema(datamgr *datamgr.DataManager) Schema {
-	return Schema{datamgr: datamgr}
+// CreateHandler creates table call handler
+func CreateHandler(datamgr *datamgr.DataManager) Handler {
+	return Handler{datamgr: datamgr}
 }
 
-// Handler manages schema calls
-func (schema Schema) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// ServeHTTP manages schema calls
+func (handler Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	log.Printf("Called /%s/schema (database schema)\n", vars["database"])
-	databaseList := schema.datamgr.DatabaseList
-	pos := -1
-	for i := 0; i < len(databaseList); i++ {
-		if databaseList[i].Name == vars["database"] {
-			pos = i
-		}
-	}
-	if pos < 0 {
-		fmt.Println("Database not found")
+	database := handler.datamgr.GetDatabase(vars["database"])
+	if database == nil {
 		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(http.StatusText(http.StatusNotFound)))
+		return
 	}
-	fmt.Println("Database found")
+
+	switch r.Method {
+	case http.MethodGet:
+		// schema.get(w, r)
+	default:
+		w.WriteHeader(http.StatusNotImplemented)
+		w.Write([]byte(http.StatusText(http.StatusNotImplemented)))
+	}
 }
+
+// func (schema Schema) get(w http.ResponseWriter, r *http.Request) {
+// 	log.Printf("Called GET /%s/schema (database schema)\n", vars["database"])
+// 	fmt.Println("Database found")
+// }

@@ -3,9 +3,11 @@ package apimgr
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/apimgr/database"
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/datamgr"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -20,10 +22,13 @@ func CreateAPIManager(endpoint string, datamgr *datamgr.DataManager) *APIManager
 	router := mux.NewRouter()
 	database.Init(router, datamgr)
 
+	// Creates handler
+	handler := handlers.LoggingHandler(os.Stdout, router)
+
 	// Create http server
 	httpsrv := &http.Server{
 		Addr:    endpoint,
-		Handler: router,
+		Handler: handler,
 	}
 
 	return &APIManager{
