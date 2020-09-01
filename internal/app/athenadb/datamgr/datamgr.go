@@ -1,29 +1,29 @@
 package datamgr
 
+const (
+	databaseAdmin = "admin"
+	tableSchema   = "schema"
+)
+
 // The DataManager manages application data operations (load, save, queries...).
 type DataManager struct {
-	databaseList []Database
+	databaseMap map[string]*Database
 }
 
 // CreateDataManager creates and initializes aplication data manager.
 func CreateDataManager() *DataManager {
-	databaseList := make([]Database, 0)
+	databaseMap := make(map[string]*Database)
 
 	// Set default values
-	databaseList = append(databaseList, Database{Name: "admin"})
+	databaseMap[databaseAdmin] = CreateDatabase()
 
 	return &DataManager{
-		databaseList: databaseList,
+		databaseMap: databaseMap,
 	}
 }
 
 // GetDatabase gets and returns the database selected by name.
-func (datamgr DataManager) GetDatabase(name string) *Database {
-	databaseList := datamgr.databaseList
-	for i := 0; i < len(databaseList); i++ {
-		if databaseList[i].Name == name {
-			return &databaseList[i]
-		}
-	}
-	return nil
+func (datamgr DataManager) GetDatabase(name string) (*Database, bool) {
+	db, present := datamgr.databaseMap[name]
+	return db, present
 }

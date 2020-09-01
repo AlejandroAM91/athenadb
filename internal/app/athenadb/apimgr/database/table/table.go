@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/datamgr"
+	"github.com/gorilla/mux"
 )
 
 // The Handler contains a table call handler
@@ -18,13 +19,20 @@ func CreateHandler(datamgr *datamgr.DataManager) Handler {
 
 // ServeHTTP manages table calls
 func (handler Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// vars := mux.Vars(r)
-	// database := schema.datamgr.GetDatabase(vars["database"])
-	// if database == nil {
-	// 	w.WriteHeader(http.StatusNotFound)
-	// 	w.Write([]byte(http.StatusText(http.StatusNotFound)))
-	// 	return
-	// }
+	vars := mux.Vars(r)
+	db, present := handler.datamgr.GetDatabase(vars["database"])
+	if !present {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(http.StatusText(http.StatusNotFound)))
+		return
+	}
+
+	_, present = db.GetTable(vars["table"])
+	if !present {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(http.StatusText(http.StatusNotFound)))
+		return
+	}
 
 	// switch r.Method {
 	// default:
@@ -32,9 +40,3 @@ func (handler Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// 	w.Write([]byte(http.StatusText(http.StatusNotImplemented)))
 	// }
 }
-
-// Handler manages table calls
-// func Handler(w http.ResponseWriter, r *http.Request) {
-// 	vars := mux.Vars(r)
-// 	log.Printf("Called /%s/%s (table data)\n", vars["database"], vars["table"])
-// }

@@ -21,23 +21,18 @@ func CreateHandler(datamgr *datamgr.DataManager) Handler {
 // ServeHTTP manages schema calls
 func (handler Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	database := handler.datamgr.GetDatabase(vars["database"])
-	if database == nil {
+	_, present := handler.datamgr.GetDatabase(vars["database"])
+	if !present {
 		w.WriteHeader(http.StatusNotFound)
 		w.Write([]byte(http.StatusText(http.StatusNotFound)))
 		return
 	}
 
-	switch r.Method {
-	case http.MethodGet:
-		// schema.get(w, r)
-	default:
-		w.WriteHeader(http.StatusNotImplemented)
-		w.Write([]byte(http.StatusText(http.StatusNotImplemented)))
-	}
+	// switch r.Method {
+	// case http.MethodGet:
+	// schema.get(w, r)
+	// default:
+	// 	w.WriteHeader(http.StatusNotImplemented)
+	// 	w.Write([]byte(http.StatusText(http.StatusNotImplemented)))
+	// }
 }
-
-// func (schema Schema) get(w http.ResponseWriter, r *http.Request) {
-// 	log.Printf("Called GET /%s/schema (database schema)\n", vars["database"])
-// 	fmt.Println("Database found")
-// }
