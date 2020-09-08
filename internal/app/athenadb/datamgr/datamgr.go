@@ -1,5 +1,7 @@
 package datamgr
 
+import "github.com/AlejandroAM91/athenadb/internal/app/athenadb/core/model"
+
 const (
 	databaseAdmin = "admin"
 	tableSchema   = "schema"
@@ -7,15 +9,15 @@ const (
 
 // The DataManager manages application data operations (load, save, queries...).
 type DataManager struct {
-	databaseMap map[string]*Database
+	databaseMap map[string]*model.Database
 }
 
 // CreateDataManager creates and initializes aplication data manager.
 func CreateDataManager() *DataManager {
-	databaseMap := make(map[string]*Database)
+	databaseMap := make(map[string]*model.Database)
 
 	// Set default values
-	databaseMap[databaseAdmin] = CreateDatabase()
+	databaseMap[databaseAdmin] = model.CreateDatabase()
 
 	return &DataManager{
 		databaseMap: databaseMap,
@@ -23,7 +25,7 @@ func CreateDataManager() *DataManager {
 }
 
 // GetDatabase gets and returns the database selected by name.
-func (datamgr DataManager) GetDatabase(name string) (*Database, bool) {
+func (datamgr DataManager) GetDatabase(name string) (*model.Database, bool) {
 	db, present := datamgr.databaseMap[name]
 	return db, present
 }

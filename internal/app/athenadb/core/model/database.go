@@ -1,4 +1,4 @@
-package datamgr
+package model
 
 // The Database contains the information about a database
 type Database struct {
@@ -10,6 +10,11 @@ func CreateDatabase() *Database {
 	return &Database{
 		tableMap: make(map[string]*Table),
 	}
+}
+
+// AddTable a new table with given name.
+func (database *Database) AddTable(name string, table *Table) {
+	database.tableMap[name] = table
 }
 
 // GetTable gets and returns the table selected by name.
