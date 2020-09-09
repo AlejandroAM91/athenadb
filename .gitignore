@@ -1,2 +1,6 @@
-# Compiled files
+# IDE
+*.swp
+
+# Output
 *.exe
+db/
