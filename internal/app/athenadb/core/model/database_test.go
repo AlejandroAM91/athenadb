@@ -1,11 +1,16 @@
 package model
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestCreateDatabase(t *testing.T) {
-	db := Database{}
-	res := CreateDatabase()
-	if db != *res {
+	db := Database{
+		colList: []string{},
+	}
+	res := CreateDatabase([]string{})
+	if !reflect.DeepEqual(db, *res) {
 		t.Error("Database values mismatch")
 	}
 }
