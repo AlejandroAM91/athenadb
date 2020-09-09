@@ -1,39 +1,43 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
-	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/core/services"
+	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/core/model"
 	"github.com/gorilla/mux"
+
+	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/core/ports"
+	"github.com/AlejandroAM91/athenadb/internal/pkg/dimgr"
 )
 
 // DatabaseController creates database call controller
 type DatabaseController struct {
-	services *services.Services
 }
 
 // CreateDatabaseController creates table call handler
-func CreateDatabaseController(services *services.Services) *DatabaseController {
-	return &DatabaseController{
-		services: services,
-	}
+func CreateDatabaseController() *DatabaseController {
+	return &DatabaseController{}
 }
 
 // ServeHTTP database controller calls
 func (ctrl DatabaseController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodGet:
-		ctrl.get(w, r)
+	case http.MethodPost:
+		ctrl.post(w, r)
 	default:
 		http.Error(w, http.StatusText(http.StatusNotImplemented), http.StatusNotImplemented)
 	}
 }
 
-func (ctrl DatabaseController) get(w http.ResponseWriter, r *http.Request) {
+func (ctrl DatabaseController) post(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	_, error := ctrl.services.GetDatabaseService().RetrieveDatabase(vars["database"])
+	dimgr := dimgr.GetManager()
+	createDbPort := dimgr.GetDependency("CreateDatabasePort").(ports.CreateDatabasePort)
+	error := createDbPort.CreateDatabase(vars["database"], model.CreateDatabase())
 	if error != nil {
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		log.Print(error)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 }

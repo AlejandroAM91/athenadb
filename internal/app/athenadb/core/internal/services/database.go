@@ -2,9 +2,13 @@ package services
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/core/model"
 )
+
+var dbsrv *DatabaseService
+var once sync.Once
 
 // The DatabaseService contains the information about all databases
 type DatabaseService struct {
