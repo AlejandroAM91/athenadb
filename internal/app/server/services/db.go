@@ -3,9 +3,9 @@ package services
 import (
 	"errors"
 
-	"github.com/AlejandroAM91/athenadb/internal/app/athenadb/ports"
-	"github.com/AlejandroAM91/athenadb/pkg/domain/model"
-	"github.com/AlejandroAM91/athenadb/pkg/domain/services"
+	"github.com/AlejandroAM91/athenadb/internal/app/server/ports"
+	"github.com/AlejandroAM91/athenadb/pkg/core/model"
+	"github.com/AlejandroAM91/athenadb/pkg/core/services"
 )
 
 type dbsrv struct {
