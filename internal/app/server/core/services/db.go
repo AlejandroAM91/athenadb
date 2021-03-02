@@ -3,7 +3,7 @@ package services
 import (
 	"errors"
 
-	"github.com/AlejandroAM91/athenadb/internal/app/server/ports"
+	"github.com/AlejandroAM91/athenadb/internal/app/server/core/ports"
 	"github.com/AlejandroAM91/athenadb/pkg/core/model"
 	"github.com/AlejandroAM91/athenadb/pkg/core/services"
 )
@@ -14,11 +14,10 @@ type dbsrv struct {
 
 // NewDBSrv creates a database manipulation service
 func NewDBSrv(storage ports.Storage) services.DB {
-	return &dbsrv{
-		storage: storage,
-	}
+	return &dbsrv{storage: storage}
 }
 
+// GetAll retrieves a list of databases
 func (s dbsrv) GetAll() ([]model.DB, error) {
 	dblist, err := s.storage.GetAll()
 	if err != nil {
